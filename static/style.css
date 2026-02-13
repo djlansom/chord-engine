@@ -1,0 +1,464 @@
+/* ============================================================
+   Chord Engine — Dark Theme
+   ============================================================ */
+
+:root {
+  --bg:          #121218;
+  --surface:     #1a1a24;
+  --surface-2:   #22222e;
+  --border:      #2a2a3a;
+  --text:        #e8e8f0;
+  --text-dim:    #888898;
+  --accent:      #6c8cff;
+  --accent-glow: rgba(108, 140, 255, 0.3);
+
+  /* Chord quality colors */
+  --chord-major:      #D4A843;
+  --chord-minor:      #5B8CB8;
+  --chord-dominant:   #D48A43;
+  --chord-diminished: #B85B5B;
+  --chord-augmented:  #8B5BB8;
+  --chord-sus:        #5BB87A;
+  --chord-altered:    #D45B8C;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'SF Mono', 'Fira Code', 'Consolas', monospace;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+  user-select: none;
+}
+
+/* ---- HEADER ---- */
+#header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 12px 20px;
+  background: var(--surface);
+  border-bottom: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.header-group {
+  display: flex;
+  gap: 16px;
+  align-items: center;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+select, input[type="number"], .seed-field {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  outline: none;
+}
+
+select:focus, input:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+.seed-field { width: 90px; }
+input[type="number"] { width: 60px; }
+
+/* ---- CHORD DISPLAY (main focus area) ---- */
+#chord-display {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  overflow: hidden;
+  min-height: 0;
+}
+
+#chord-track {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  transition: transform 0.3s ease;
+  padding: 0 40px;
+}
+
+.chord-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 20px;
+  border-radius: 8px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  min-width: 80px;
+  transition: all 0.3s ease;
+  opacity: 0.35;
+  transform: scale(0.8);
+}
+
+.chord-card.current {
+  opacity: 1;
+  transform: scale(1);
+  border-color: var(--accent);
+  box-shadow: 0 0 20px var(--accent-glow);
+}
+
+.chord-card.adjacent {
+  opacity: 0.6;
+  transform: scale(0.9);
+}
+
+.chord-symbol {
+  font-size: 48px;
+  font-weight: 700;
+  line-height: 1.1;
+  white-space: nowrap;
+}
+
+.chord-card.current .chord-symbol {
+  font-size: 64px;
+}
+
+.chord-roman {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 4px;
+}
+
+.chord-card.mutated {
+  animation: mutate-flash 0.4s ease;
+}
+
+@keyframes mutate-flash {
+  0%   { background: rgba(255, 255, 100, 0.2); }
+  100% { background: var(--surface); }
+}
+
+/* Quality color classes */
+.quality-major      .chord-symbol { color: var(--chord-major); }
+.quality-minor      .chord-symbol { color: var(--chord-minor); }
+.quality-dominant   .chord-symbol { color: var(--chord-dominant); }
+.quality-diminished .chord-symbol { color: var(--chord-diminished); }
+.quality-augmented  .chord-symbol { color: var(--chord-augmented); }
+.quality-sus        .chord-symbol { color: var(--chord-sus); }
+.quality-altered    .chord-symbol { color: var(--chord-altered); }
+
+/* ---- BEAT INDICATOR ---- */
+#beat-indicator {
+  display: flex;
+  gap: 10px;
+  margin-top: 24px;
+}
+
+.beat-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  transition: all 0.1s ease;
+}
+
+.beat-dot.active {
+  background: var(--accent);
+  border-color: var(--accent);
+  box-shadow: 0 0 8px var(--accent-glow);
+}
+
+/* ---- LOOP VIEW ---- */
+#loop-view {
+  padding: 10px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+  overflow-x: auto;
+}
+
+#loop-view.hidden { display: none; }
+
+#loop-strip {
+  display: flex;
+  gap: 4px;
+  min-width: max-content;
+}
+
+.loop-cell {
+  padding: 6px 12px;
+  border-radius: 4px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  font-size: 14px;
+  font-weight: 600;
+  white-space: nowrap;
+  transition: all 0.2s ease;
+}
+
+.loop-cell.active {
+  border-color: var(--accent);
+  background: rgba(108, 140, 255, 0.15);
+}
+
+.loop-cell.mutated-cell {
+  animation: mutate-flash 0.5s ease;
+}
+
+/* ---- CONTROLS ---- */
+#controls {
+  padding: 14px 20px;
+  background: var(--surface);
+  border-top: 1px solid var(--border);
+  flex-shrink: 0;
+}
+
+.control-row {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.control-row + .control-row {
+  margin-top: 10px;
+}
+
+.slider-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex: 1;
+  max-width: 360px;
+}
+
+input[type="range"] {
+  flex: 1;
+  accent-color: var(--accent);
+  cursor: pointer;
+}
+
+#mutation-value {
+  font-size: 13px;
+  color: var(--text);
+  min-width: 36px;
+  text-align: right;
+}
+
+button {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 6px 14px;
+  font-family: inherit;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+button:hover {
+  border-color: var(--accent);
+  background: rgba(108, 140, 255, 0.1);
+}
+
+button.active {
+  background: rgba(108, 140, 255, 0.2);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.primary-btn {
+  background: var(--accent);
+  color: #fff;
+  border-color: var(--accent);
+  font-weight: 600;
+}
+
+.primary-btn:hover {
+  background: #5a7aee;
+}
+
+.primary-btn.playing {
+  background: #cc4444;
+  border-color: #cc4444;
+}
+
+.primary-btn.playing:hover {
+  background: #bb3333;
+}
+
+.button-group {
+  display: flex;
+  gap: 8px;
+}
+
+.mode-toggle, .metro-toggle, .loop-toggle {
+  gap: 6px;
+}
+
+/* ---- HISTORY SIDEBAR ---- */
+#history-panel {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 300px;
+  height: 100vh;
+  background: var(--surface);
+  border-left: 1px solid var(--border);
+  padding: 20px;
+  overflow-y: auto;
+  z-index: 100;
+  transform: translateX(0);
+  transition: transform 0.25s ease;
+}
+
+#history-panel.hidden {
+  transform: translateX(100%);
+}
+
+#history-panel h3 {
+  margin-bottom: 14px;
+  font-size: 16px;
+}
+
+.history-item {
+  padding: 10px;
+  margin-bottom: 8px;
+  background: var(--surface-2);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 12px;
+}
+
+.history-item:hover {
+  border-color: var(--accent);
+}
+
+.history-item .chords-preview {
+  font-size: 13px;
+  font-weight: 600;
+  margin-bottom: 4px;
+}
+
+.history-item .meta {
+  color: var(--text-dim);
+}
+
+#history-close-btn {
+  margin-top: 12px;
+  width: 100%;
+}
+
+/* ---- RHYTHM CONTROLS ---- */
+.rhythm-controls, .rhythm-script {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.rhythm-controls.hidden, .rhythm-script.hidden {
+  display: none;
+}
+
+.pattern-field {
+  background: var(--surface-2);
+  color: var(--text);
+  border: 1px solid var(--border);
+  border-radius: 4px;
+  padding: 4px 8px;
+  font-family: inherit;
+  font-size: 13px;
+  width: 120px;
+  outline: none;
+}
+
+.pattern-field:focus {
+  border-color: var(--accent);
+  box-shadow: 0 0 0 2px var(--accent-glow);
+}
+
+/* ---- SWING SLIDER ---- */
+#swing-value {
+  font-size: 13px;
+  color: var(--text);
+  min-width: 36px;
+  text-align: right;
+}
+
+/* ---- COUNT-IN ---- */
+#chord-track.counting-in .chord-card {
+  opacity: 0.15 !important;
+}
+
+.beat-dot.count-in-pulse {
+  animation: count-pulse 0.3s ease;
+}
+
+@keyframes count-pulse {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.5); }
+  100% { transform: scale(1); }
+}
+
+/* ---- PRACTICE MODE ---- */
+.practice-toggle {
+  gap: 6px;
+}
+
+#practice-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 90;
+  cursor: pointer;
+}
+
+#practice-overlay.hidden {
+  display: none;
+}
+
+.practice-message {
+  text-align: center;
+  font-size: 24px;
+  font-weight: 600;
+  color: var(--text);
+}
+
+.practice-hint {
+  font-size: 14px;
+  color: var(--text-dim);
+  margin-top: 12px;
+  font-weight: 400;
+}
+
+/* ---- RESPONSIVE ---- */
+@media (max-width: 700px) {
+  .chord-card.current .chord-symbol { font-size: 48px; }
+  .chord-symbol { font-size: 32px; }
+  .control-row { gap: 10px; }
+  #header { flex-direction: column; gap: 8px; }
+}

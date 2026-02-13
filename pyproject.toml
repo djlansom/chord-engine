@@ -1,0 +1,20 @@
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["."]
+addopts = [
+    "-v",
+    "--tb=short",
+    "--strict-markers",
+]
+markers = [
+    "slow: marks tests that run many iterations (deselect with '-m \"not slow\"')",
+    "statistical: marks tests that verify probabilistic behavior",
+]
+
+[tool.coverage.run]
+source = ["engine", "api"]
+omit = ["tests/*"]
+
+[tool.coverage.report]
+fail_under = 85
+show_missing = true

@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Chord Engine</title>
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+
+  <!-- HEADER -->
+  <header id="header">
+    <div class="header-group">
+      <label>Key
+        <select id="key-select"></select>
+      </label>
+      <label>Scale
+        <select id="scale-select"></select>
+      </label>
+      <label>BPM
+        <input type="number" id="bpm-input" value="120" min="40" max="200" step="5">
+      </label>
+      <label>Meter
+        <input type="number" id="meter-input" value="4" min="2" max="12" step="1">
+      </label>
+    </div>
+    <div class="header-group">
+      <label>Seed
+        <input type="text" id="seed-input" placeholder="random" class="seed-field">
+      </label>
+    </div>
+  </header>
+
+  <!-- SCROLLING CHORD DISPLAY -->
+  <main id="chord-display">
+    <div id="chord-track">
+      <!-- Chord cards rendered by JS -->
+    </div>
+    <div id="beat-indicator">
+      <!-- Beat dots rendered dynamically by JS based on meter -->
+    </div>
+  </main>
+
+  <!-- LOOP VIEW -->
+  <section id="loop-view" class="hidden">
+    <div id="loop-strip">
+      <!-- Loop chord cells rendered by JS -->
+    </div>
+  </section>
+
+  <!-- CONTROLS -->
+  <footer id="controls">
+    <div class="control-row">
+      <label class="slider-label">Mutation
+        <input type="range" id="mutation-slider" min="0" max="100" value="10" step="1">
+        <span id="mutation-value">0.10</span>
+      </label>
+      <label class="slider-label">Swing
+        <input type="range" id="swing-slider" min="50" max="67" value="50" step="1">
+        <span id="swing-value">50%</span>
+      </label>
+    </div>
+    <div class="control-row">
+      <label>Voicing
+        <select id="voicing-select"></select>
+      </label>
+      <label>Length
+        <select id="length-select"></select>
+      </label>
+      <div class="rhythm-controls" id="rhythm-controls">
+        <label>Bars/chord
+          <select id="bars-per-chord-select">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+        <label>Chords/bar
+          <select id="chords-per-bar-select">
+            <option value="1" selected>1</option>
+            <option value="2">2</option>
+            <option value="4">4</option>
+          </select>
+        </label>
+        <button id="rhythm-script-btn" title="Toggle pattern script mode">Script</button>
+      </div>
+      <div class="rhythm-script hidden" id="rhythm-script">
+        <label>Pattern
+          <input type="text" id="pattern-input" placeholder="1 1 1 2" class="pattern-field">
+        </label>
+        <button id="rhythm-simple-btn" title="Back to simple mode">Simple</button>
+      </div>
+    </div>
+    <div class="control-row">
+      <label class="mode-toggle">
+        Mode
+        <button id="mode-btn" data-mode="raw">Raw</button>
+      </label>
+      <div class="button-group">
+        <button id="play-btn" class="primary-btn">&#9654; Play</button>
+        <button id="new-seed-btn">&#126; New Seed</button>
+        <button id="save-btn">Save Loop</button>
+        <button id="history-btn">History</button>
+      </div>
+      <label class="metro-toggle">
+        Metronome
+        <button id="metro-btn" class="active">Audio</button>
+      </label>
+      <label class="loop-toggle">
+        <button id="loop-toggle-btn">Loop View</button>
+      </label>
+      <label class="practice-toggle">
+        <button id="practice-btn">Practice</button>
+      </label>
+    </div>
+  </footer>
+
+  <!-- PRACTICE MODE OVERLAY -->
+  <div id="practice-overlay" class="hidden">
+    <div class="practice-message">
+      <div>Loop complete</div>
+      <div class="practice-hint">Press Space or click to continue</div>
+    </div>
+  </div>
+
+  <!-- HISTORY SIDEBAR -->
+  <aside id="history-panel" class="hidden">
+    <h3>Saved Loops</h3>
+    <div id="history-list"></div>
+    <button id="history-close-btn">Close</button>
+  </aside>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>
