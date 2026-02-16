@@ -90,7 +90,7 @@ python -m pytest tests/ --cov=engine --cov=api --cov-report=term-missing
 
 ## MAPIS-ONE Integration
 
-David's personal intelligence system lives at c:\Code_Projects\career-agent\mapis-one\
+David's personal intelligence system lives at D:\Code_Projects\career-agent\mapis-one\
 
 For deliberation, blind spot scans, or accountability checks:
 1. Read agent prompts: src/mapis/agents/{navigator,challenger,builder}/system_prompt.md
@@ -98,10 +98,10 @@ For deliberation, blind spot scans, or accountability checks:
 3. Follow protocols in CLAUDE.md (deliberation, blind spot scan, accountability check modes)
 
 To capture MAPIS improvement ideas from this project:
-- Append to: c:\Code_Projects\career-agent\mapis-one\data\state\backlog.yaml
+- Append to: D:\Code_Projects\career-agent\mapis-one\data\state\backlog.yaml
 - Format: `{date, source_project: "chord-engine", idea, status: pending}`
 
 ## Full Build Plan
 
 The detailed implementation plan (Turing Machine algorithm, music theory engine, UI/UX specs, deployment strategy) is at:
-- c:\Code_Projects\chord-engine\PLAN.md
+- D:\Code_Projects\chord-engine\PLAN.md
